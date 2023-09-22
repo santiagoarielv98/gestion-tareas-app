@@ -1,6 +1,7 @@
-import type { RouteObject } from 'react-router-dom';
-import Home from '../../pages/home/Home';
-import Layout from '../../layouts/main/Layout';
+import type { RouteObject } from 'react-router-dom'
+
+import Home from '../../pages/home/Home'
+import Layout from '../../layouts/main/Layout'
 
 const mainRoutes: RouteObject = {
   path: '/',
@@ -8,9 +9,9 @@ const mainRoutes: RouteObject = {
   children: [
     {
       path: '/',
-      element: <Home />,
-    },
-  ],
-};
+      element: <Home />
+    }
+  ]
+}
 
-export default mainRoutes;
+export default mainRoutes

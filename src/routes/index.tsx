@@ -1,10 +1,10 @@
-import { createBrowserRouter } from 'react-router-dom';
-import mainRoutes from './main';
+import { createBrowserRouter } from 'react-router-dom'
+import mainRoutes from './main'
 
 const routes = createBrowserRouter([
   {
-    children: [mainRoutes],
-  },
-]);
+    children: [mainRoutes]
+  }
+])
 
-export default routes;
+export default routes
