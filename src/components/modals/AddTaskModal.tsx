@@ -24,7 +24,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   }
 }))
 
-const CustomizedDialogs = (): JSX.Element => {
+const AddTaskModal = (): JSX.Element => {
   const [open, setOpen] = React.useState(false)
   const [createTask] = useCreateTaskMutation()
 
@@ -126,4 +126,4 @@ const CustomizedDialogs = (): JSX.Element => {
   )
 }
 
-export default CustomizedDialogs
+export default AddTaskModal
