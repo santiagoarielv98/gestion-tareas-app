@@ -13,9 +13,7 @@ const Home = (): JSX.Element => {
   const { data = [], isFetching } = useGetTasksQuery()
   const [open, setOpen] = React.useState(false)
   const [task, setTask] = React.useState<Task | null>(null)
-  const [updateTask, result] = useUpdateTaskMutation({
-    fixedCacheKey: 'shared-update-post'
-  })
+  const [updateTask, result] = useUpdateTaskMutation()
 
   const handleUpdate = async (task: Task): Promise<void> => {
     await updateTask({

@@ -11,18 +11,8 @@ import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import IconButton from '@mui/material/IconButton'
 import TextField from '@mui/material/TextField'
-import { styled } from '@mui/material/styles'
 import * as React from 'react'
 import { useCreateTaskMutation } from '../../services/tasks'
-
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
-    padding: theme.spacing(2)
-  },
-  '& .MuiDialogActions-root': {
-    padding: theme.spacing(1)
-  }
-}))
 
 const AddTaskModal = (): JSX.Element => {
   const [open, setOpen] = React.useState(false)
@@ -59,13 +49,12 @@ const AddTaskModal = (): JSX.Element => {
       <Button variant="outlined" onClick={handleClickOpen} color="inherit">
         + Add Task
       </Button>
-      <BootstrapDialog
+      <Dialog
         component="form"
         onClose={handleClose}
         onSubmit={(ev) => {
           void handleSubmit(ev)
         }}
-        aria-labelledby="customized-dialog-title"
         open={open}
       >
         <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
@@ -96,7 +85,6 @@ const AddTaskModal = (): JSX.Element => {
             required
           />
           <TextField
-            autoFocus
             margin="dense"
             id="description"
             name="description"
@@ -117,11 +105,9 @@ const AddTaskModal = (): JSX.Element => {
           </FormGroup>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus type="submit">
-            Create Task
-          </Button>
+          <Button type="submit">Create Task</Button>
         </DialogActions>
-      </BootstrapDialog>
+      </Dialog>
     </div>
   )
 }
