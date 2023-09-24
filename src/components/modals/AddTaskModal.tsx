@@ -16,7 +16,7 @@ import { useCreateTaskMutation } from '../../services/tasks'
 
 const AddTaskModal = (): JSX.Element => {
   const [open, setOpen] = React.useState(false)
-  const [createTask] = useCreateTaskMutation()
+  const [createTask, createResult] = useCreateTaskMutation()
 
   const handleClickOpen = (): void => {
     setOpen(true)
@@ -105,7 +105,9 @@ const AddTaskModal = (): JSX.Element => {
           </FormGroup>
         </DialogContent>
         <DialogActions>
-          <Button type="submit">Create Task</Button>
+          <Button disabled={createResult.isLoading} type="submit">
+            Create Task
+          </Button>
         </DialogActions>
       </Dialog>
     </div>

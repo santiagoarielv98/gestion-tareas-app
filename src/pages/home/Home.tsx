@@ -8,6 +8,8 @@ import type { Task } from '../../types/tasks'
 import DeleteTaskModal from '../../components/modals/DeleteTaskModal'
 import React from 'react'
 import UpdateTaskModal from '../../components/modals/UpdateTaskModal'
+import { TransitionGroup } from 'react-transition-group'
+import Collapse from '@mui/material/Collapse'
 
 const Home = (): JSX.Element => {
   const { data = [], isFetching } = useGetTasksQuery()
@@ -33,37 +35,42 @@ const Home = (): JSX.Element => {
 
   return (
     <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      {data.map((task) => {
-        return (
-          <ListItem
-            key={task._id}
-            secondaryAction={
-              <>
-                <Checkbox
+      <TransitionGroup>
+        {data.map((task) => (
+          <Collapse key={task._id}>
+            {
+              <ListItem
+                key={task._id}
+                secondaryAction={
+                  <>
+                    <Checkbox
+                      onClick={() => {
+                        void handleUpdate(task)
+                      }}
+                      disabled={result.isLoading || isFetching}
+                      checked={task.completed}
+                    />
+                    <DeleteTaskModal id={task._id} />
+                  </>
+                }
+                sx={{
+                  textDecoration: task.completed ? 'line-through' : 'none'
+                }}
+                disablePadding
+              >
+                <ListItemButton
                   onClick={() => {
-                    void handleUpdate(task)
+                    handleOpen(task)
                   }}
-                  disabled={result.isLoading || isFetching}
-                  checked={task.completed}
-                />
-                <DeleteTaskModal id={task._id} />
-              </>
+                >
+                  <ListItemText id={task._id} primary={task.name} secondary={task.description} />
+                </ListItemButton>
+              </ListItem>
             }
-            sx={{
-              textDecoration: task.completed ? 'line-through' : 'none'
-            }}
-            disablePadding
-          >
-            <ListItemButton
-              onClick={() => {
-                handleOpen(task)
-              }}
-            >
-              <ListItemText id={task._id} primary={task.name} secondary={task.description} />
-            </ListItemButton>
-          </ListItem>
-        )
-      })}
+          </Collapse>
+        ))}
+      </TransitionGroup>
+
       {task !== null && <UpdateTaskModal open={open} onClose={handleClose} task={task} />}
     </List>
   )
