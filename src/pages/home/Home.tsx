@@ -1,78 +1,39 @@
-import Checkbox from '@mui/material/Checkbox'
+import CircleIcon from '@mui/icons-material/Circle'
+
+import Box from '@mui/material/Box'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
-import { useGetTasksQuery, useUpdateTaskMutation } from '../../services/tasks'
-import type { Task } from '../../types/tasks'
-import DeleteTaskModal from '../../components/modals/DeleteTaskModal'
-import React from 'react'
-import UpdateTaskModal from '../../components/modals/UpdateTaskModal'
-import { TransitionGroup } from 'react-transition-group'
-import Collapse from '@mui/material/Collapse'
 
 const Home = (): JSX.Element => {
-  const { data = [], isFetching } = useGetTasksQuery()
-  const [open, setOpen] = React.useState(false)
-  const [task, setTask] = React.useState<Task | null>(null)
-  const [updateTask, result] = useUpdateTaskMutation()
-
-  const handleUpdate = async (task: Task): Promise<void> => {
-    await updateTask({
-      ...task,
-      completed: !task.completed
-    })
-  }
-
-  const handleOpen = (task: Task): void => {
-    setOpen(true)
-    setTask(task)
-  }
-
-  const handleClose = (): void => {
-    setOpen(false)
-  }
-
   return (
-    <List dense sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-      <TransitionGroup>
-        {data.map((task) => (
-          <Collapse key={task._id}>
-            {
-              <ListItem
-                key={task._id}
-                secondaryAction={
-                  <>
-                    <Checkbox
-                      onClick={() => {
-                        void handleUpdate(task)
-                      }}
-                      disabled={result.isLoading || isFetching}
-                      checked={task.completed}
-                    />
-                    <DeleteTaskModal id={task._id} />
-                  </>
-                }
-                sx={{
-                  textDecoration: task.completed ? 'line-through' : 'none'
-                }}
-                disablePadding
-              >
-                <ListItemButton
-                  onClick={() => {
-                    handleOpen(task)
-                  }}
-                >
-                  <ListItemText id={task._id} primary={task.name} secondary={task.description} />
-                </ListItemButton>
-              </ListItem>
-            }
-          </Collapse>
-        ))}
-      </TransitionGroup>
-
-      {task !== null && <UpdateTaskModal open={open} onClose={handleClose} task={task} />}
-    </List>
+    <div>
+      <Box maxWidth={320}>
+        <ListItem component="div">
+          <CircleIcon sx={{ mr: 2 }} fontSize="inherit" />
+          <ListItemText primary="To do" />
+        </ListItem>
+        <List
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 2
+          }}
+        >
+          {[1, 2, 3].map((number) => (
+            <ListItem key={number} disablePadding>
+              <Card sx={{ width: '100%' }}>
+                <CardContent>
+                  <ListItemText primary="todo" secondary="0 of 3 tasks completed" />
+                </CardContent>
+              </Card>
+            </ListItem>
+          ))}
+        </List>
+      </Box>
+    </div>
   )
 }
 

@@ -1,9 +1,16 @@
+import * as React from 'react'
+import { Outlet } from 'react-router-dom'
+
+import { ListSubheader, useMediaQuery } from '@mui/material'
+
+import AddIcon from '@mui/icons-material/Add'
 import MenuIcon from '@mui/icons-material/Menu'
-import { useMediaQuery } from '@mui/material'
+import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
+
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
-import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
 import List from '@mui/material/List'
@@ -12,10 +19,7 @@ import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
-import * as React from 'react'
-import { Outlet } from 'react-router-dom'
-import AddTaskModal from '../../components/modals/AddTaskModal'
-import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
+import Typography from '@mui/material/Typography'
 
 const drawerWidth = 240
 
@@ -34,12 +38,21 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
 
   const drawer = (
     <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {['Main'].map((text) => (
+      <Toolbar>
+        <Typography variant="h6" noWrap component="div">
+          Kanban
+        </Typography>
+      </Toolbar>
+      <List
+        subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            all boards
+          </ListSubheader>
+        }
+      >
+        {['1', '2'].map((text) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton selected>
+            <ListItemButton selected={text === '1'}>
               <ListItemIcon>
                 <SpaceDashboardOutlinedIcon />
               </ListItemIcon>
@@ -47,6 +60,14 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText primary={'add new board'} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </div>
   )
@@ -60,8 +81,13 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` }
+          ml: { sm: `${drawerWidth}px` },
+          backgroundColor: '#fff',
+          color: '#000',
+          borderBottom: '1px solid',
+          borderColor: '#e0e0e0'
         }}
+        elevation={0}
       >
         <Toolbar>
           <IconButton
@@ -73,7 +99,12 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           >
             <MenuIcon />
           </IconButton>
-          <AddTaskModal />
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            News
+          </Typography>
+          <Button variant="contained" color="secondary">
+            Add New Task
+          </Button>
         </Toolbar>
       </AppBar>
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
