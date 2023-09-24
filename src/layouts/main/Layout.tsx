@@ -1,6 +1,5 @@
-import MailIcon from '@mui/icons-material/Mail'
 import MenuIcon from '@mui/icons-material/Menu'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
+import { useMediaQuery } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -16,6 +15,7 @@ import Toolbar from '@mui/material/Toolbar'
 import * as React from 'react'
 import { Outlet } from 'react-router-dom'
 import AddTaskModal from '../../components/modals/AddTaskModal'
+import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
 
 const drawerWidth = 240
 
@@ -26,6 +26,7 @@ interface Props {
 const ResponsiveDrawer = (props: Props): JSX.Element => {
   const { window } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const isDesktop = useMediaQuery('(min-width:600px)')
 
   const handleDrawerToggle = (): void => {
     setMobileOpen(!mobileOpen)
@@ -36,10 +37,12 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
       <Toolbar />
       <Divider />
       <List>
-        {['Main'].map((text, index) => (
+        {['Main'].map((text) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemButton selected>
+              <ListItemIcon>
+                <SpaceDashboardOutlinedIcon />
+              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -74,29 +77,20 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
         </Toolbar>
       </AppBar>
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true // Better open performance on mobile.
-          }}
+          {...(!isDesktop && {
+            container,
+            anchor: 'left',
+            onClose: handleDrawerToggle,
+            ModalProps: {
+              keepMounted: true
+            }
+          })}
+          variant={isDesktop ? 'permanent' : 'temporary'}
           sx={{
-            display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
           }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
-          }}
-          open
+          open={isDesktop ? true : mobileOpen}
         >
           {drawer}
         </Drawer>
