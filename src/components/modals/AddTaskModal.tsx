@@ -1,116 +1,144 @@
-import CloseIcon from '@mui/icons-material/Close'
 import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
-import Dialog from '@mui/material/Dialog'
+import Collapse from '@mui/material/Collapse'
+import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import FormControl from '@mui/material/FormControl'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import FormGroup from '@mui/material/FormGroup'
 import FormLabel from '@mui/material/FormLabel'
 import IconButton from '@mui/material/IconButton'
+import List from '@mui/material/List'
 import TextField from '@mui/material/TextField'
-import * as React from 'react'
-import { useCreateTaskMutation } from '../../services/tasks'
+import React from 'react'
+import { TransitionGroup } from 'react-transition-group'
+import DeleteIcon from '@mui/icons-material/Delete'
+import Checkbox from '@mui/material/Checkbox'
+import FormControlLabel from '@mui/material/FormControlLabel'
 
-const AddTaskModal = (): JSX.Element => {
-  const [open, setOpen] = React.useState(false)
-  const [createTask, createResult] = useCreateTaskMutation()
+interface SubTask {
+  title: string
+  done: boolean
+}
 
-  const handleClickOpen = (): void => {
-    setOpen(true)
-  }
-  const handleClose = (): void => {
-    setOpen(false)
-  }
-
-  const handleSubmit = async (ev: React.FormEvent<HTMLDivElement>): Promise<void> => {
-    ev.preventDefault()
-
-    const form = ev.target as HTMLFormElement
-    const formData = new FormData(form)
-
-    const task = {
-      name: formData.get('name') as string,
-      description: formData.get('description') as string,
-      completed: (formData.get('completed') as string) === 'on'
+const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
+  const [subtask, setSubtask] = React.useState<SubTask[]>([
+    {
+      done: false,
+      title: ''
     }
-    try {
-      await createTask(task)
-      handleClose()
-    } catch (error) {
-      console.log(error)
-    }
+  ])
+  const [checked, setChecked] = React.useState(false)
+
+  const handleAddFruit = (): void => {
+    setSubtask([...subtask, { title: '', done: false }])
   }
 
   return (
-    <div>
-      <Button variant="outlined" onClick={handleClickOpen} color="inherit">
-        + Add Task
-      </Button>
-      <Dialog
-        component="form"
-        onClose={handleClose}
-        onSubmit={(ev) => {
-          void handleSubmit(ev)
-        }}
-        open={open}
-      >
-        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-          Create a new task
-        </DialogTitle>
-        <IconButton
-          aria-label="close"
-          onClick={handleClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500]
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <DialogContent dividers>
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            name="name"
-            label="Task Name"
-            type="text"
-            variant="standard"
-            fullWidth
-            required
+    <Dialog
+      open={open}
+      onClose={onClose}
+      PaperProps={{
+        sx: {
+          width: '100%',
+          maxWidth: 480
+        }
+      }}
+    >
+      <DialogTitle>Add New Task</DialogTitle>
+      <DialogContent>
+        {/* status */}
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <FormLabel component="legend" focused={false}>
+            Status
+          </FormLabel>
+          <FormControlLabel
+            control={
+              <Checkbox
+                id="status"
+                name="status"
+                checked={checked}
+                onChange={(e) => {
+                  setChecked(e.target.checked)
+                }}
+              />
+            }
+            label={checked ? 'Done' : 'Not Done'}
           />
-          <TextField
-            margin="dense"
-            id="description"
-            name="description"
-            label="Task Description"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <FormGroup>
-            <FormControl margin="dense" component="fieldset" variant="standard">
-              <FormLabel focused={false} component="legend">
-                Task Status
-              </FormLabel>
-              <FormGroup>
-                <FormControlLabel control={<Checkbox id="completed" name="completed" />} label="Completed" />
-              </FormGroup>
-            </FormControl>
-          </FormGroup>
-        </DialogContent>
-        <DialogActions>
-          <Button disabled={createResult.isLoading} type="submit">
-            Create Task
+        </FormControl>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="title"
+          label="Title"
+          type="text"
+          fullWidth
+          placeholder="e.g. Buy milk"
+          InputLabelProps={{ shrink: true }}
+        />
+        <TextField
+          margin="dense"
+          id="description"
+          label="Description"
+          type="text"
+          fullWidth
+          placeholder="e.g. visit the nearest supermarket and buy milk. Don't forget to check the expiration date!"
+          InputLabelProps={{ shrink: true }}
+          multiline
+          rows={4}
+        />
+
+        <FormControl fullWidth sx={{ mt: 2 }}>
+          <FormLabel component="legend" focused={false}>
+            Subtask
+          </FormLabel>
+          <List>
+            <TransitionGroup>
+              {subtask.map((item, index) => (
+                <Collapse key={`${item.title}-${index}`}>
+                  {
+                    <TextField
+                      margin="dense"
+                      type="text"
+                      fullWidth
+                      placeholder="e.g. Buy milk"
+                      InputLabelProps={{ shrink: true }}
+                      InputProps={{
+                        endAdornment: (
+                          <>
+                            <Checkbox id={`subtask-${index}`} />
+                            <IconButton
+                              onClick={() => {
+                                setSubtask(subtask.filter((_, i) => i !== index))
+                              }}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </>
+                        )
+                      }}
+                    />
+                  }
+                </Collapse>
+              ))}
+            </TransitionGroup>
+          </List>
+          <Button variant="contained" onClick={handleAddFruit}>
+            Add New Subtask
           </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+        </FormControl>
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 3 }}>
+        <Button
+          onClick={(ev) => {
+            onClose?.(ev, 'backdropClick')
+          }}
+          variant="contained"
+          fullWidth
+        >
+          Create Task
+        </Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 

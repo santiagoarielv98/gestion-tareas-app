@@ -2,6 +2,7 @@ import CircleIcon from '@mui/icons-material/Circle'
 
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
+import CardActionArea from '@mui/material/CardActionArea'
 import CardContent from '@mui/material/CardContent'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
@@ -25,9 +26,11 @@ const Home = (): JSX.Element => {
           {[1, 2, 3].map((number) => (
             <ListItem key={number} disablePadding>
               <Card sx={{ width: '100%' }}>
-                <CardContent>
-                  <ListItemText primary="todo" secondary="0 of 3 tasks completed" />
-                </CardContent>
+                <CardActionArea>
+                  <CardContent>
+                    <ListItemText primary="todo" secondary="0 of 3 tasks completed" />
+                  </CardContent>
+                </CardActionArea>
               </Card>
             </ListItem>
           ))}

@@ -26,11 +26,13 @@ const drawerWidth = 240
 interface Props {
   window?: () => Window
 }
+const AddTaskModal = React.lazy(async () => await import('../../components/modals/AddTaskModal'))
 
 const ResponsiveDrawer = (props: Props): JSX.Element => {
   const { window } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const isDesktop = useMediaQuery('(min-width:600px)')
+  const [open, setOpen] = React.useState(false)
 
   const handleDrawerToggle = (): void => {
     setMobileOpen(!mobileOpen)
@@ -102,7 +104,12 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             News
           </Typography>
-          <Button variant="contained" color="secondary">
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpen(true)
+            }}
+          >
             Add New Task
           </Button>
         </Toolbar>
@@ -130,6 +137,16 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
         <Toolbar />
         <Outlet />
       </Box>
+      <React.Suspense fallback={null}>
+        {open && (
+          <AddTaskModal
+            open={open}
+            onClose={() => {
+              setOpen(false)
+            }}
+          />
+        )}
+      </React.Suspense>
     </Box>
   )
 }
