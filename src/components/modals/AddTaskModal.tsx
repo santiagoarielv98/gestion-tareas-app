@@ -1,4 +1,6 @@
+import DeleteIcon from '@mui/icons-material/Delete'
 import Button from '@mui/material/Button'
+import Checkbox from '@mui/material/Checkbox'
 import Collapse from '@mui/material/Collapse'
 import Dialog, { type DialogProps } from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
@@ -7,13 +9,13 @@ import DialogTitle from '@mui/material/DialogTitle'
 import FormControl from '@mui/material/FormControl'
 import FormLabel from '@mui/material/FormLabel'
 import IconButton from '@mui/material/IconButton'
+import InputLabel from '@mui/material/InputLabel'
 import List from '@mui/material/List'
+import MenuItem from '@mui/material/MenuItem'
+import Select from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import React from 'react'
 import { TransitionGroup } from 'react-transition-group'
-import DeleteIcon from '@mui/icons-material/Delete'
-import Checkbox from '@mui/material/Checkbox'
-import FormControlLabel from '@mui/material/FormControlLabel'
 
 interface SubTask {
   title: string
@@ -27,7 +29,7 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
       title: ''
     }
   ])
-  const [checked, setChecked] = React.useState(false)
+  const [status, setStatus] = React.useState('todo')
 
   const handleAddFruit = (): void => {
     setSubtask([...subtask, { title: '', done: false }])
@@ -46,25 +48,6 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
     >
       <DialogTitle>Add New Task</DialogTitle>
       <DialogContent>
-        {/* status */}
-        <FormControl fullWidth sx={{ mt: 2 }}>
-          <FormLabel component="legend" focused={false}>
-            Status
-          </FormLabel>
-          <FormControlLabel
-            control={
-              <Checkbox
-                id="status"
-                name="status"
-                checked={checked}
-                onChange={(e) => {
-                  setChecked(e.target.checked)
-                }}
-              />
-            }
-            label={checked ? 'Done' : 'Not Done'}
-          />
-        </FormControl>
         <TextField
           autoFocus
           margin="dense"
@@ -87,7 +70,7 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
           rows={4}
         />
 
-        <FormControl fullWidth sx={{ mt: 2 }}>
+        <FormControl fullWidth>
           <FormLabel component="legend" focused={false}>
             Subtask
           </FormLabel>
@@ -122,9 +105,29 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
               ))}
             </TransitionGroup>
           </List>
-          <Button variant="contained" onClick={handleAddFruit}>
+          <Button variant="outlined" onClick={handleAddFruit}>
             Add New Subtask
           </Button>
+        </FormControl>
+        {/* status */}
+        <FormControl fullWidth sx={{ my: 2 }}>
+          <InputLabel id="status-label">Status</InputLabel>
+          <Select
+            margin="dense"
+            label="Status"
+            labelId="status-label"
+            id="status"
+            value={status}
+            onChange={(ev) => {
+              setStatus(ev.target.value)
+            }}
+            variant="outlined"
+            fullWidth
+          >
+            <MenuItem value="todo">To Do</MenuItem>
+            <MenuItem value="inprogress">In Progress</MenuItem>
+            <MenuItem value="completed">Completed</MenuItem>
+          </Select>
         </FormControl>
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 3 }}>
