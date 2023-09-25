@@ -12,13 +12,21 @@ interface UseAddTask {
 const useAddTask = (): UseAddTask => {
   const [subtask, setSubtask] = React.useState<SubTask[]>([
     {
+      _id: Math.random().toString(36).substring(7),
       done: false,
       title: ''
     }
   ])
 
   const addSubtask = (): void => {
-    setSubtask([...subtask, { title: '', done: false }])
+    setSubtask([
+      ...subtask,
+      {
+        _id: Math.random().toString(36).substring(7),
+        title: '',
+        done: false
+      }
+    ])
   }
 
   const removeSubtask = (index: number): void => {
