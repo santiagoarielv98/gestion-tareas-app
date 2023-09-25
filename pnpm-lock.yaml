@@ -23,6 +23,12 @@ dependencies:
   '@types/react-transition-group':
     specifier: ^4.4.6
     version: 4.4.6
+  '@reduxjs/toolkit':
+    specifier: ^1.9.5
+    version: 1.9.5(react-redux@8.1.2)(react@18.2.0)
+  '@types/react-transition-group':
+    specifier: ^4.4.6
+    version: 4.4.6
   localforage:
     specifier: ^1.10.0
     version: 1.10.0

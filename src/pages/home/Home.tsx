@@ -167,7 +167,7 @@ const TaskComponent = ({ task, index }: TaskComponentProps): JSX.Element => {
           <Card
             sx={{
               width: '100%',
-              backgroundColor: snapshot.isDragging === true ? 'lightgreen' : 'white'
+              backgroundColor: snapshot.isDragging ? 'lightgreen' : 'white'
             }}
           >
             <CardContent>
