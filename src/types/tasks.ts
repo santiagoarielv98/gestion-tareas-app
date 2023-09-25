@@ -17,3 +17,8 @@ export interface TaskUpdate {
   description?: string
   completed?: boolean
 }
+
+export interface SubTask {
+  title: string
+  done: boolean
+}
