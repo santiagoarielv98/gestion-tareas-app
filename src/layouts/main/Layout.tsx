@@ -1,31 +1,38 @@
 import * as React from 'react'
+import { Outlet } from 'react-router-dom'
+
+import { ListSubheader, useMediaQuery } from '@mui/material'
+
+import AddIcon from '@mui/icons-material/Add'
+import MenuIcon from '@mui/icons-material/Menu'
+import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
+
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
+import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
-import Divider from '@mui/material/Divider'
 import Drawer from '@mui/material/Drawer'
 import IconButton from '@mui/material/IconButton'
-import InboxIcon from '@mui/icons-material/MoveToInbox'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
-import MailIcon from '@mui/icons-material/Mail'
-import MenuIcon from '@mui/icons-material/Menu'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
-import { Outlet } from 'react-router-dom'
 
 const drawerWidth = 240
 
 interface Props {
   window?: () => Window
 }
+const AddTaskModal = React.lazy(async () => await import('../../components/modals/AddTaskModal'))
 
 const ResponsiveDrawer = (props: Props): JSX.Element => {
   const { window } = props
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const isDesktop = useMediaQuery('(min-width:600px)')
+  const [open, setOpen] = React.useState(false)
 
   const handleDrawerToggle = (): void => {
     setMobileOpen(!mobileOpen)
@@ -33,17 +40,36 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
 
   const drawer = (
     <div>
-      <Toolbar />
-      <Divider />
-      <List>
-        {['Main'].map((text, index) => (
+      <Toolbar>
+        <Typography variant="h6" noWrap component="div">
+          Kanban
+        </Typography>
+      </Toolbar>
+      <List
+        subheader={
+          <ListSubheader component="div" id="nested-list-subheader">
+            all boards
+          </ListSubheader>
+        }
+      >
+        {['1', '2'].map((text) => (
           <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+            <ListItemButton selected={text === '1'}>
+              <ListItemIcon>
+                <SpaceDashboardOutlinedIcon />
+              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
         ))}
+        <ListItem disablePadding>
+          <ListItemButton>
+            <ListItemIcon>
+              <AddIcon />
+            </ListItemIcon>
+            <ListItemText primary={'add new board'} />
+          </ListItemButton>
+        </ListItem>
       </List>
     </div>
   )
@@ -57,8 +83,13 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
         position="fixed"
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` }
+          ml: { sm: `${drawerWidth}px` },
+          backgroundColor: '#fff',
+          color: '#000',
+          borderBottom: '1px solid',
+          borderColor: '#e0e0e0'
         }}
+        elevation={0}
       >
         <Toolbar>
           <IconButton
@@ -70,35 +101,34 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Responsive drawer
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            News
           </Typography>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setOpen(true)
+            }}
+          >
+            Add New Task
+          </Button>
         </Toolbar>
       </AppBar>
       <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Drawer
-          container={container}
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true // Better open performance on mobile.
-          }}
+          {...(!isDesktop && {
+            container,
+            anchor: 'left',
+            onClose: handleDrawerToggle,
+            ModalProps: {
+              keepMounted: true
+            }
+          })}
+          variant={isDesktop ? 'permanent' : 'temporary'}
           sx={{
-            display: { xs: 'block', sm: 'none' },
             '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
           }}
-        >
-          {drawer}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth }
-          }}
-          open
+          open={isDesktop ? true : mobileOpen}
         >
           {drawer}
         </Drawer>
@@ -107,6 +137,16 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
         <Toolbar />
         <Outlet />
       </Box>
+      <React.Suspense fallback={null}>
+        {open && (
+          <AddTaskModal
+            open={open}
+            onClose={() => {
+              setOpen(false)
+            }}
+          />
+        )}
+      </React.Suspense>
     </Box>
   )
 }
