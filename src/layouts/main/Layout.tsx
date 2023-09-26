@@ -52,16 +52,14 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           </ListSubheader>
         }
       >
-        {['1', '2'].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton selected={text === '1'}>
-              <ListItemIcon>
-                <SpaceDashboardOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton selected>
+            <ListItemIcon>
+              <SpaceDashboardOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Board 1" />
+          </ListItemButton>
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
@@ -133,7 +131,17 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           {drawer}
         </Drawer>
       </Box>
-      <Box component="main" sx={{ flexGrow: 1, p: 3, width: { sm: `calc(100% - ${drawerWidth}px)` } }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          height: '100vh',
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
         <Toolbar />
         <Outlet />
       </Box>
