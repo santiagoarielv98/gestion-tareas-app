@@ -52,16 +52,14 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           </ListSubheader>
         }
       >
-        {['1', '2'].map((text) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton selected={text === '1'}>
-              <ListItemIcon>
-                <SpaceDashboardOutlinedIcon />
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        <ListItem disablePadding>
+          <ListItemButton selected>
+            <ListItemIcon>
+              <SpaceDashboardOutlinedIcon />
+            </ListItemIcon>
+            <ListItemText primary="Board 1" />
+          </ListItemButton>
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton>
             <ListItemIcon>
