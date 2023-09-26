@@ -167,7 +167,8 @@ const ColumnComponent = ({ column, index }: ColumnComponentProps): JSX.Element =
             minWidth: 320,
             display: 'flex',
             flexDirection: 'column',
-            mr: 2
+            mr: 2,
+            bgcolor: 'common.white'
           }}
         >
           <ListItem
@@ -194,7 +195,8 @@ const ColumnComponent = ({ column, index }: ColumnComponentProps): JSX.Element =
                   flexDirection: 'column',
                   flexGrow: 1,
                   transition: 'background-color 0.2s ease',
-                  bgcolor: snapshot.isDraggingOver ? 'grey.300' : 'grey.100'
+                  bgcolor: snapshot.isDraggingOver ? 'grey.300' : 'grey.100',
+                  p: 2
                 }}
                 {...provided.droppableProps}
               >
