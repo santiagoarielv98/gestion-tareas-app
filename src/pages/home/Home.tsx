@@ -7,53 +7,15 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemText from '@mui/material/ListItemText'
 
-import Button from '@mui/material/Button'
-import React from 'react'
-import kanban from '../../mocks/kanban.json'
-import type { Column, Task } from '../../types/tasks'
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
+import Button from '@mui/material/Button'
+import type { Column, Task } from '../../types/tasks'
 
-import { DragDropContext, Droppable, Draggable, type OnDragEndResponder } from 'react-beautiful-dnd'
 import IconButton from '@mui/material/IconButton'
-
-// const getRandomColor = (): string => {
-//   const letters = '0123456789ABCDEF'
-//   let color = '#'
-//   for (let i = 0; i < 6; i++) {
-//     color += letters[Math.floor(Math.random() * 16)]
-//   }
-//   return color
-// }
+import { DragDropContext, Draggable, Droppable, type OnDragEndResponder } from 'react-beautiful-dnd'
 
 const Home = (): JSX.Element => {
-  const [columns, setColumns] = React.useState<Column[]>([])
-
-  React.useEffect(() => {
-    setColumns(kanban)
-  }, [])
-
-  const createColumn = (): void => {
-    const newColumn: Column = {
-      _id: Math.random().toString(36).substring(7),
-      title: 'New Column',
-      tasks: []
-    }
-    setColumns([newColumn, ...columns])
-  }
-
-  const createTask = (): void => {
-    const newTask: Task = {
-      _id: Math.random().toString(36).substring(7),
-      title: 'New Task',
-      subtasks: [],
-      done: false
-    }
-    // random column
-    const randomColumn = Math.floor(Math.random() * columns.length)
-    const newColumns = [...columns]
-    newColumns[randomColumn].tasks.push(newTask)
-    setColumns(newColumns)
-  }
+  const columns: Column[] = []
 
   const handleDragEnd: OnDragEndResponder = (result) => {
     const { source, destination, type } = result
@@ -64,26 +26,7 @@ const Home = (): JSX.Element => {
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return
     }
-
-    if (type === 'column') {
-      const newColumns = [...columns]
-      const column = newColumns.splice(source.index, 1)[0]
-      newColumns.splice(destination.index, 0, column)
-      setColumns(newColumns)
-      return
-    }
-
-    const newColumns = [...columns]
-    const sourceColumnIndex = newColumns.findIndex((column) => column._id === source.droppableId)
-    const destinationColumnIndex = newColumns.findIndex((column) => column._id === destination.droppableId)
-
-    const sourceColumn = newColumns[sourceColumnIndex]
-    const destinationColumn = newColumns[destinationColumnIndex]
-
-    const task = sourceColumn.tasks.splice(source.index, 1)[0]
-    destinationColumn.tasks.splice(destination.index, 0, task)
-
-    setColumns(newColumns)
+    console.log(result, type)
   }
 
   return (
@@ -98,12 +41,8 @@ const Home = (): JSX.Element => {
           gap: 15
         }}
       >
-        <Button variant="contained" onClick={createColumn}>
-          Create Column
-        </Button>
-        <Button variant="contained" onClick={createTask}>
-          Create Task
-        </Button>
+        <Button variant="contained">Create Column</Button>
+        <Button variant="contained">Create Task</Button>
       </div>
 
       <div
@@ -113,7 +52,7 @@ const Home = (): JSX.Element => {
         }}
       >
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="columns" direction="horizontal" type="column">
+          <Droppable droppableId="columns" direction="horizontal" type="columns">
             {(provided) => (
               <div
                 ref={provided.innerRef}
@@ -134,22 +73,15 @@ const Home = (): JSX.Element => {
   )
 }
 
-const InnerColumnList = React.memo((props: { columns: Column[] }): JSX.Element[] => {
+const InnerColumnList = (props: { columns: Column[] }): JSX.Element[] => {
   const { columns } = props
   return columns.map((column, index) => <ColumnComponent key={column._id} column={column} index={index} />)
-})
+}
 
-InnerColumnList.displayName = 'InnerColumnList'
-
-const InnerTaskList = React.memo<{ tasks: Task[] }>(
-  (props): JSX.Element[] => {
-    const { tasks } = props
-    return tasks.map((task, index) => <TaskComponent key={task._id} task={task} index={index} />)
-  },
-  (prevProps, nextProps) => prevProps.tasks !== nextProps.tasks
-)
-
-InnerTaskList.displayName = 'InnerTaskList'
+const InnerTaskList = (props: { tasks: Task[] }): JSX.Element[] => {
+  const { tasks } = props
+  return tasks.map((task, index) => <TaskComponent key={task._id} task={task} index={index} />)
+}
 
 interface ColumnComponentProps {
   column: Column
@@ -186,7 +118,7 @@ const ColumnComponent = ({ column, index }: ColumnComponentProps): JSX.Element =
             />
             <ListItemText primary={`${column.title} (${column.tasks.length})`} />
           </ListItem>
-          <Droppable droppableId={column._id} type="task">
+          <Droppable droppableId={column._id} type="tasks">
             {(provided, snapshot) => (
               <List
                 ref={provided.innerRef}
