@@ -3,6 +3,7 @@ export interface Column {
   title: string
   description?: string
   tasks: Task[]
+  position: number
 }
 
 export interface Task {
@@ -11,6 +12,7 @@ export interface Task {
   description?: string
   done: boolean
   subtasks: SubTask[]
+  position: number
 }
 
 export interface SubTask {
