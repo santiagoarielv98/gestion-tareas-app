@@ -1,42 +1,42 @@
-import * as React from 'react'
-import { Outlet } from 'react-router-dom'
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
-import { ListSubheader, useMediaQuery } from '@mui/material'
+import { ListSubheader, useMediaQuery } from '@mui/material';
 
-import AddIcon from '@mui/icons-material/Add'
-import MenuIcon from '@mui/icons-material/Menu'
-import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined'
+import AddIcon from '@mui/icons-material/Add';
+import MenuIcon from '@mui/icons-material/Menu';
+import SpaceDashboardOutlinedIcon from '@mui/icons-material/SpaceDashboardOutlined';
 
-import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
-import Drawer from '@mui/material/Drawer'
-import IconButton from '@mui/material/IconButton'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemIcon from '@mui/material/ListItemIcon'
-import ListItemText from '@mui/material/ListItemText'
-import Toolbar from '@mui/material/Toolbar'
-import Typography from '@mui/material/Typography'
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import Drawer from '@mui/material/Drawer';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
 
-const drawerWidth = 240
+const drawerWidth = 240;
 
 interface Props {
-  window?: () => Window
+  window?: () => Window;
 }
-const AddTaskModal = React.lazy(async () => await import('../../components/modals/AddTaskModal'))
+const AddTaskModal = React.lazy(async () => await import('../../components/modals/AddTaskModal'));
 
 const ResponsiveDrawer = (props: Props): JSX.Element => {
-  const { window } = props
-  const [mobileOpen, setMobileOpen] = React.useState(false)
-  const isDesktop = useMediaQuery('(min-width:600px)')
-  const [open, setOpen] = React.useState(false)
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const isDesktop = useMediaQuery('(min-width:600px)');
+  const [open, setOpen] = React.useState(false);
 
   const handleDrawerToggle = (): void => {
-    setMobileOpen(!mobileOpen)
-  }
+    setMobileOpen(!mobileOpen);
+  };
 
   const drawer = (
     <div>
@@ -70,9 +70,9 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
         </ListItem>
       </List>
     </div>
-  )
+  );
 
-  const container = window !== undefined ? () => window().document.body : undefined
+  const container = window !== undefined ? () => window().document.body : undefined;
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -105,7 +105,7 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           <Button
             variant="contained"
             onClick={() => {
-              setOpen(true)
+              setOpen(true);
             }}
           >
             Add New Task
@@ -150,13 +150,13 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           <AddTaskModal
             open={open}
             onClose={() => {
-              setOpen(false)
+              setOpen(false);
             }}
           />
         )}
       </React.Suspense>
     </Box>
-  )
-}
+  );
+};
 
-export default ResponsiveDrawer
+export default ResponsiveDrawer;

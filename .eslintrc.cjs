@@ -1,9 +1,14 @@
 module.exports = {
+  settings: {
+    react: {
+      version: 'detect'
+    }
+  },
   env: {
     browser: true,
     es2021: true
   },
-  extends: ['standard-with-typescript', 'plugin:react/recommended', 'plugin:react-hooks/recommended'],
+  extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended', 'plugin:react/recommended'],
   overrides: [
     {
       env: {
@@ -15,16 +20,11 @@ module.exports = {
       }
     }
   ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: './tsconfig.json'
+    sourceType: 'module'
   },
-  plugins: ['react'],
-  rules: {
-    '@typescript-eslint/triple-slash-reference': 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off',
-    'react/react-in-jsx-scope': 'off',
-    '@typescript-eslint/no-invalid-void-type': 'off'
-  }
-}
+  plugins: ['@typescript-eslint', 'react'],
+  rules: {}
+};

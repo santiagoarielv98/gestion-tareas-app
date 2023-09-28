@@ -1,4 +1,4 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
 export const columnsApi = createApi({
   reducerPath: 'columnsApi',
@@ -8,4 +8,4 @@ export const columnsApi = createApi({
       query: () => '/tasks'
     })
   })
-})
+});

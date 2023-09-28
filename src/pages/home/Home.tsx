@@ -1,33 +1,34 @@
-import CircleIcon from '@mui/icons-material/Circle'
+import React from 'react';
+import CircleIcon from '@mui/icons-material/Circle';
 
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemText from '@mui/material/ListItemText'
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
-import Button from '@mui/material/Button'
-import type { Column, Task } from '../../types/tasks'
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
+import Button from '@mui/material/Button';
+import type { Column, Task } from '../../types/tasks';
 
-import IconButton from '@mui/material/IconButton'
-import { DragDropContext, Draggable, Droppable, type OnDragEndResponder } from 'react-beautiful-dnd'
+import IconButton from '@mui/material/IconButton';
+import { DragDropContext, Draggable, Droppable, type OnDragEndResponder } from 'react-beautiful-dnd';
 
 const Home = (): JSX.Element => {
-  const columns: Column[] = []
+  const columns: Column[] = [];
 
   const handleDragEnd: OnDragEndResponder = (result) => {
-    const { source, destination, type } = result
+    const { source, destination, type } = result;
     if (destination === null || destination === undefined) {
-      return
+      return;
     }
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return
+      return;
     }
-    console.log(result, type)
-  }
+    console.log(result, type);
+  };
 
   return (
     <>
@@ -70,22 +71,22 @@ const Home = (): JSX.Element => {
         </DragDropContext>
       </div>
     </>
-  )
-}
+  );
+};
 
 const InnerColumnList = (props: { columns: Column[] }): JSX.Element[] => {
-  const { columns } = props
-  return columns.map((column, index) => <ColumnComponent key={column._id} column={column} index={index} />)
-}
+  const { columns } = props;
+  return columns.map((column, index) => <ColumnComponent key={column._id} column={column} index={index} />);
+};
 
 const InnerTaskList = (props: { tasks: Task[] }): JSX.Element[] => {
-  const { tasks } = props
-  return tasks.map((task, index) => <TaskComponent key={task._id} task={task} index={index} />)
-}
+  const { tasks } = props;
+  return tasks.map((task, index) => <TaskComponent key={task._id} task={task} index={index} />);
+};
 
 interface ColumnComponentProps {
-  column: Column
-  index: number
+  column: Column;
+  index: number;
 }
 
 const ColumnComponent = ({ column, index }: ColumnComponentProps): JSX.Element => {
@@ -140,17 +141,17 @@ const ColumnComponent = ({ column, index }: ColumnComponentProps): JSX.Element =
         </Box>
       )}
     </Draggable>
-  )
-}
+  );
+};
 
 interface TaskComponentProps {
-  task: Task
-  index: number
+  task: Task;
+  index: number;
 }
 
 const TaskComponent = ({ task, index }: TaskComponentProps): JSX.Element => {
-  const length = task.subtasks.length
-  const completed = task.subtasks.filter((subtask) => subtask.done).length
+  const length = task.subtasks.length;
+  const completed = task.subtasks.filter((subtask) => subtask.done).length;
 
   return (
     <Draggable key={task._id} draggableId={task._id} index={index}>
@@ -175,7 +176,7 @@ const TaskComponent = ({ task, index }: TaskComponentProps): JSX.Element => {
         </ListItem>
       )}
     </Draggable>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

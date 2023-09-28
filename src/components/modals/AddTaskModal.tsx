@@ -1,27 +1,28 @@
-import DeleteIcon from '@mui/icons-material/Delete'
+import React from 'react';
+import DeleteIcon from '@mui/icons-material/Delete';
 
-import Button from '@mui/material/Button'
-import Checkbox from '@mui/material/Checkbox'
-import Collapse from '@mui/material/Collapse'
-import Dialog, { type DialogProps } from '@mui/material/Dialog'
-import DialogActions from '@mui/material/DialogActions'
-import DialogContent from '@mui/material/DialogContent'
-import DialogTitle from '@mui/material/DialogTitle'
-import FormControl from '@mui/material/FormControl'
-import FormLabel from '@mui/material/FormLabel'
-import IconButton from '@mui/material/IconButton'
-import InputLabel from '@mui/material/InputLabel'
-import List from '@mui/material/List'
-import MenuItem from '@mui/material/MenuItem'
-import Select from '@mui/material/Select'
-import TextField from '@mui/material/TextField'
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Collapse from '@mui/material/Collapse';
+import Dialog, { type DialogProps } from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
+import InputLabel from '@mui/material/InputLabel';
+import List from '@mui/material/List';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import TextField from '@mui/material/TextField';
 
-import { TransitionGroup } from 'react-transition-group'
-import useAddTask from './useAddTask'
-import FormControlLabel from '@mui/material/FormControlLabel'
+import { TransitionGroup } from 'react-transition-group';
+import useAddTask from './useAddTask';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
-  const { subtask, addSubtask, createTask, removeSubtask, updateSubtask } = useAddTask()
+  const { subtask, addSubtask, createTask, removeSubtask, updateSubtask } = useAddTask();
 
   return (
     <Dialog
@@ -75,7 +76,7 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
                     <TextField
                       value={item.title}
                       onChange={(ev) => {
-                        updateSubtask(index, { title: ev.target.value })
+                        updateSubtask(index, { title: ev.target.value });
                       }}
                       name={`subtask-${index}`}
                       margin="dense"
@@ -89,14 +90,14 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
                             <Checkbox
                               checked={item.done}
                               onChange={(ev) => {
-                                updateSubtask(index, { done: ev.target.checked })
+                                updateSubtask(index, { done: ev.target.checked });
                               }}
                               id={`subtask-${index}`}
                               name={`subtask-${index}-done`}
                             />
                             <IconButton
                               onClick={() => {
-                                removeSubtask(index)
+                                removeSubtask(index);
                               }}
                             >
                               <DeleteIcon />
@@ -142,7 +143,7 @@ const AddTaskModal = ({ open, onClose }: DialogProps): JSX.Element => {
         </Button>
       </DialogActions>
     </Dialog>
-  )
-}
+  );
+};
 
-export default AddTaskModal
+export default AddTaskModal;
