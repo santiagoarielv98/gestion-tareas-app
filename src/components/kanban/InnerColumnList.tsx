@@ -10,11 +10,11 @@ export interface InnerColumnListProps {
 
 const InnerColumnList = ({ columns = [] }: InnerColumnListProps) => {
   return (
-    <div>
+    <>
       {columns.map((column, index) => (
         <ColumnItem key={column._id} column={column} index={index} />
       ))}
-    </div>
+    </>
   );
 };
 
