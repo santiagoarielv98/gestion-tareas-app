@@ -3,6 +3,10 @@ import { DropResult } from 'react-beautiful-dnd';
 import { Column } from '../types/tasks';
 import type { DeepNonNullable } from '../types/common';
 
+const updatePosition = <T extends { position: number }>(item: T, index: number) => {
+  item.position = index;
+};
+
 export const api = createApi({
   reducerPath: 'columnsApi',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
@@ -12,7 +16,7 @@ export const api = createApi({
       query: () => '/columns',
       providesTags: ['Columns']
     }),
-    updatePosition: builder.mutation<void, DeepNonNullable<DropResult>>({
+    move: builder.mutation<void, DeepNonNullable<DropResult>>({
       query: (dropResult) => ({
         url: `/${dropResult.type}/${dropResult.draggableId}/position`,
         method: 'PUT',
@@ -26,9 +30,7 @@ export const api = createApi({
                 const [removed] = draftColumns.splice(source.index, 1);
                 draftColumns.splice(destination!.index, 0, removed);
 
-                draftColumns.forEach((column, index) => {
-                  column.position = index;
-                });
+                draftColumns.forEach(updatePosition);
                 break;
               }
               case 'tasks':
@@ -41,12 +43,8 @@ export const api = createApi({
                   const [taskToMove] = sourceColumn.tasks.splice(source.index, 1);
                   destinationColumn.tasks.splice(destination.index, 0, taskToMove);
 
-                  sourceColumn.tasks.forEach((task, index) => {
-                    task.position = index;
-                  });
-                  destinationColumn.tasks.forEach((task, index) => {
-                    task.position = index;
-                  });
+                  sourceColumn.tasks.forEach(updatePosition);
+                  destinationColumn.tasks.forEach(updatePosition);
                 }
                 break;
               default:
@@ -65,4 +63,4 @@ export const api = createApi({
   })
 });
 
-export const { useGetColumnsQuery, useUpdatePositionMutation } = api;
+export const { useGetColumnsQuery, useMoveMutation } = api;
