@@ -8,8 +8,14 @@ export interface InnerColumnListProps {
   columns: Column[];
 }
 
-const InnerColumnList = ({ columns = [] }: InnerColumnListProps): JSX.Element[] => {
-  return columns.map((column, index) => <ColumnItem key={column._id} column={column} index={index} />);
+const InnerColumnList = ({ columns = [] }: InnerColumnListProps) => {
+  return (
+    <div>
+      {columns.map((column, index) => (
+        <ColumnItem key={column._id} column={column} index={index} />
+      ))}
+    </div>
+  );
 };
 
 export default InnerColumnList;
