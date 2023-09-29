@@ -2,7 +2,7 @@ import React from 'react';
 
 import ColumnItem from './Column';
 
-import type { Column } from '../../types/tasks';
+import type { Column } from '../../types/kanban';
 
 export interface InnerColumnListProps {
   columns: Column[];

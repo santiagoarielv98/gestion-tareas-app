@@ -11,7 +11,7 @@ import InnerTaskList from './InnerTaskList';
 import CircleIcon from '@mui/icons-material/Circle';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
-import type { Column } from '../../types/tasks';
+import type { Column } from '../../types/kanban';
 
 interface ColumnProps {
   column: Column;

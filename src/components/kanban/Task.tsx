@@ -6,7 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import { Draggable } from 'react-beautiful-dnd';
 
-import type { Task } from '../../types/tasks';
+import type { Task } from '../../types/kanban';
 
 interface TaskProps {
   task: Task;

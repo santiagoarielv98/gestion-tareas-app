@@ -1,5 +1,5 @@
 import React from 'react';
-import type { SubTask } from '../../types/tasks';
+import type { SubTask } from '../../types/kanban';
 
 interface UseAddTask {
   subtask: SubTask[];

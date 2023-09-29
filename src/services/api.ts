@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { DropResult } from 'react-beautiful-dnd';
-import { Column } from '../types/tasks';
+import { Column } from '../types/kanban';
 import type { DeepNonNullable } from '../types/common';
 
 const updatePosition = <T extends { position: number }>(item: T, index: number) => {

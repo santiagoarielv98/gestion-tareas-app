@@ -2,7 +2,7 @@ import React from 'react';
 
 import TaskItem from './Task';
 
-import type { Task } from '../../types/tasks';
+import type { Task } from '../../types/kanban';
 
 export interface InnerTaskListProps {
   tasks: Task[];
