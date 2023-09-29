@@ -13,28 +13,24 @@ import Button from '@mui/material/Button';
 import type { Column, Task } from '../../types/tasks';
 
 import IconButton from '@mui/material/IconButton';
-import { DragDropContext, Draggable, Droppable, type OnDragEndResponder } from 'react-beautiful-dnd';
-import { useGetColumnsQuery, useUpdatePositionMutation } from '../../services/columns';
+import { DragDropContext, Draggable, DropResult, Droppable, type OnDragEndResponder } from 'react-beautiful-dnd';
+import { useGetColumnsQuery, useUpdatePositionMutation } from '../../services/api';
+import { DeepNonNullable } from '../../types/common';
 
 const Home = (): JSX.Element => {
-  const { data: columns = [] } = useGetColumnsQuery();
-  const [updatePositionColumn, { isLoading }] = useUpdatePositionMutation();
+  const { data: columns = [], isFetching } = useGetColumnsQuery();
+  const [updatePosition, { isLoading }] = useUpdatePositionMutation();
 
   const handleDragEnd: OnDragEndResponder = (result) => {
-    if (isLoading) return;
-    const { source, destination, type } = result;
-    if (destination === null || destination === undefined) {
-      return;
-    }
-
-    if (destination.droppableId === source.droppableId && destination.index === source.index) {
-      return;
-    }
-
-    if (type === 'columns') {
-      updatePositionColumn(result);
-    }
+    const { source, destination } = result;
+    if (isLoading || !destination) return;
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+    updatePosition(result as DeepNonNullable<DropResult>);
   };
+
+  React.useEffect(() => {
+    console.log(columns, isFetching);
+  }, [columns]);
 
   return (
     <>
