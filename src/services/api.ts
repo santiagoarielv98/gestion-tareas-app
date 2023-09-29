@@ -2,6 +2,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { DropResult } from 'react-beautiful-dnd';
 import { Column } from '../types/kanban';
 import type { DeepNonNullable } from '../types/common';
+import { API_URL } from '../constants/app';
 
 const updatePosition = <T extends { position: number }>(item: T, index: number) => {
   item.position = index;
@@ -9,7 +10,7 @@ const updatePosition = <T extends { position: number }>(item: T, index: number) 
 
 export const api = createApi({
   reducerPath: 'columnsApi',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:3000' }),
+  baseQuery: fetchBaseQuery({ baseUrl: API_URL }),
   tagTypes: ['Columns'],
   endpoints: (builder) => ({
     getColumns: builder.query<Column[], void>({
