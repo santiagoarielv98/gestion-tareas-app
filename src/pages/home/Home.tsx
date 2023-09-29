@@ -14,11 +14,14 @@ import type { Column, Task } from '../../types/tasks';
 
 import IconButton from '@mui/material/IconButton';
 import { DragDropContext, Draggable, Droppable, type OnDragEndResponder } from 'react-beautiful-dnd';
+import { useGetColumnsQuery, useUpdatePositionMutation } from '../../services/columns';
 
 const Home = (): JSX.Element => {
-  const columns: Column[] = [];
+  const { data: columns = [] } = useGetColumnsQuery();
+  const [updatePositionColumn, { isLoading }] = useUpdatePositionMutation();
 
   const handleDragEnd: OnDragEndResponder = (result) => {
+    if (isLoading) return;
     const { source, destination, type } = result;
     if (destination === null || destination === undefined) {
       return;
@@ -27,7 +30,10 @@ const Home = (): JSX.Element => {
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return;
     }
-    console.log(result, type);
+
+    if (type === 'columns') {
+      updatePositionColumn(result);
+    }
   };
 
   return (
@@ -75,7 +81,8 @@ const Home = (): JSX.Element => {
 };
 
 const InnerColumnList = (props: { columns: Column[] }): JSX.Element[] => {
-  const { columns } = props;
+  const { columns = [] } = props;
+
   return columns.map((column, index) => <ColumnComponent key={column._id} column={column} index={index} />);
 };
 

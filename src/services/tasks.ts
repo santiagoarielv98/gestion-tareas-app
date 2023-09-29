@@ -9,3 +9,5 @@ export const tasksApi = createApi({
     })
   })
 });
+
+export const { useGetTasksQuery } = tasksApi;
