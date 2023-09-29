@@ -28,17 +28,8 @@ interface Props {
 }
 const AddTaskModal = React.lazy(async () => await import('../../components/modals/AddTaskModal'));
 
-const ResponsiveDrawer = (props: Props): JSX.Element => {
-  const { window } = props;
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const isDesktop = useMediaQuery('(min-width:600px)');
-  const [open, setOpen] = React.useState(false);
-
-  const handleDrawerToggle = (): void => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  const drawer = (
+const DrawerContent = (): JSX.Element => {
+  return (
     <div>
       <Toolbar>
         <Typography variant="h6" noWrap component="div">
@@ -71,6 +62,17 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
       </List>
     </div>
   );
+};
+
+const ResponsiveDrawer = (props: Props): JSX.Element => {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const isDesktop = useMediaQuery('(min-width:600px)');
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerToggle = (): void => {
+    setMobileOpen(!mobileOpen);
+  };
 
   const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -128,7 +130,7 @@ const ResponsiveDrawer = (props: Props): JSX.Element => {
           }}
           open={isDesktop ? true : mobileOpen}
         >
-          {drawer}
+          {<DrawerContent />}
         </Drawer>
       </Box>
       <Box
