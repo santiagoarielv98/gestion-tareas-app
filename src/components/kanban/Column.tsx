@@ -12,6 +12,7 @@ import CircleIcon from '@mui/icons-material/Circle';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 import type { Column } from '../../types/kanban';
+import { KanbanType } from '../../constants/app';
 
 interface ColumnProps {
   column: Column;
@@ -48,7 +49,7 @@ const ColumnItem = ({ column, index }: ColumnProps): JSX.Element => {
             />
             <ListItemText primary={`${column.title} (${column.tasks.length})`} />
           </ListItem>
-          <Droppable droppableId={column._id} type="tasks">
+          <Droppable droppableId={column._id} type={KanbanType.TASK}>
             {(provided, snapshot) => (
               <List
                 ref={provided.innerRef}

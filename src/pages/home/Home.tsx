@@ -1,23 +1,45 @@
 import React from 'react';
 
-import { useGetColumnsQuery, useMoveMutation } from '../../services/api';
-
 import Button from '@mui/material/Button';
-import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import InnerColumnList from '../../components/kanban/InnerColumnList';
 
 import type { OnDragEndResponder } from 'react-beautiful-dnd';
-import type { DeepNonNullable } from '../../types/common';
+import { Column } from '../../types/kanban';
+import { KanbanType } from '../../constants/app';
 
 const Home = (): JSX.Element => {
-  const { data: columns = [] } = useGetColumnsQuery();
-  const [move, { isLoading }] = useMoveMutation();
+  const [columns, setColumns] = React.useState<Column[]>([]);
 
   const handleDragEnd: OnDragEndResponder = (result) => {
-    const { source, destination } = result;
-    if (isLoading || !destination) return;
-    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-    move(result as DeepNonNullable<DropResult>);
+    const { source, destination, type } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (destination.droppableId === source.droppableId && destination.index === source.index) {
+      return;
+    }
+    if (type === 'column') {
+      const newColumns = [...columns];
+      const column = newColumns.splice(source.index, 1)[0];
+      newColumns.splice(destination.index, 0, column);
+      setColumns(newColumns);
+      return;
+    }
+
+    const newColumns = [...columns];
+    const sourceColumnIndex = newColumns.findIndex((column) => column._id === source.droppableId);
+    const destinationColumnIndex = newColumns.findIndex((column) => column._id === destination.droppableId);
+
+    const sourceColumn = newColumns[sourceColumnIndex];
+    const destinationColumn = newColumns[destinationColumnIndex];
+
+    const task = sourceColumn.tasks.splice(source.index, 1)[0];
+    destinationColumn.tasks.splice(destination.index, 0, task);
+
+    setColumns(newColumns);
   };
 
   return (
@@ -43,7 +65,7 @@ const Home = (): JSX.Element => {
         }}
       >
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="columns" direction="horizontal" type="columns">
+          <Droppable droppableId="columns" direction="horizontal" type={KanbanType.COLUMN}>
             {(provided) => (
               <div
                 ref={provided.innerRef}
